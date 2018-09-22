@@ -11,7 +11,15 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
+root = environ.Path(__file__) - 1 # three folder back (/a/b/c/ - 3 = /)
+env = environ.Env(DEBUG=(bool, False),) # set default values and casting
+environ.Env.read_env() # reading .env file
 
+SITE_ROOT = root()
+
+DEBUG = env('DEBUG') # False if not in os.environ
+TEMPLATE_DEBUG = DEBUG
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,10 +28,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(z^4cdr+t4!dysfxgd-ek@pa_25wqroyfp=j+2i@f$(ii7wgm#'
-
+#SECRET_KEY = '(z^4cdr+t4!dysfxgd-ek@pa_25wqroyfp=j+2i@f$(ii7wgm#'
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,11 +91,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'backend_db',
-	'USER': 'backend_user',
-	'PASSWORD': 'backend_password',
-	'HOST': '192.168.1.109',
-	'PORT': '3306',
+        'NAME': env('DJANGO_DATABASE_NAME'),
+	'USER': env('DJANGO_DATABASE_USER'),
+	'PASSWORD': env('DJANGO_DATABASE_PASSWORD'),
+	'HOST': env('DJANGO_DATABASE_HOST'),
+	'PORT': env('DJANGO_DATABASE_PORT'),
     }
 }
 
