@@ -36,6 +36,7 @@ Docker Environments
 ------
 
 >`SECRET_KEY`: usado para informar uma chave de criptografia. Mais detalhes em https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY. O django vai gerar uma chave se não for especificado um valor.
+
 > `DJANGO_DATABASE_USER`: usado para informar o usuário para conexão com o banco de dados. O valor default é `backend_user`
 
 > `DJANGO_DATABASE_NAME`: usado para informar um nome do banco de dados. No arquivo compose é criado um banco default mas caso queria executar manualmente será preciso criar o database antes de iniciar o container da aplicação django. O valor default é `backend_db`
