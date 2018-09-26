@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  backend:
+    image: raphaelfabricios/backend:1.0
+    ports:
+      - 80:80
+    environment:
+      DJANGO_DATABASE_USER: backend_user
+      DJANGO_DATABASE_PASSWORD: backend_password
+      DJANGO_DATABASE_NAME: backend_db
+      DJANGO_DATABASE_HOST: mysql
+      DJANGO_DATABASE_PORT: 3306
+    depends_on:
+      - mysql
+    restart: on-failure    
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: backend_password
+      MYSQL_DATABASE: backend_db
+      MYSQL_USER: backend_user
+      MYSQL_PASSWORD: backend_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    
+volumes:
+  mysql-data:
