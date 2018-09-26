@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import environ
+from django.utils.crypto import get_random_string
+
 root = environ.Path(__file__) - 1 # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False),) # set default values and casting
 environ.Env.read_env() # reading .env file
@@ -29,7 +31,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = '(z^4cdr+t4!dysfxgd-ek@pa_25wqroyfp=j+2i@f$(ii7wgm#'
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEYS = env('SECRET_KEY')
+if SECRET_KEYS == 0:
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    SECRET_KEY = get_random_string(50, chars)
+else:
+    SECRET_KEY = SECRET_KEYS
+
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 
@@ -92,10 +100,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': env('DJANGO_DATABASE_NAME'),
-	'USER': env('DJANGO_DATABASE_USER'),
-	'PASSWORD': env('DJANGO_DATABASE_PASSWORD'),
-	'HOST': env('DJANGO_DATABASE_HOST'),
-	'PORT': env('DJANGO_DATABASE_PORT'),
+	    'USER': env('DJANGO_DATABASE_USER'),
+	    'PASSWORD': env('DJANGO_DATABASE_PASSWORD'),
+	    'HOST': env('DJANGO_DATABASE_HOST'),
+	    'PORT': env('DJANGO_DATABASE_PORT'),
     }
 }
 
@@ -144,3 +152,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '/static')
