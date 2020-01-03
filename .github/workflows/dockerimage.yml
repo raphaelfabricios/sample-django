@@ -3,14 +3,11 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      Date: $(date +%s)
-      SHA: ${GITHUB_SHA::6}
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag raphaelfabricios/backend:$SHA --tag raphaelfabricios/backend:latest
+      run: docker build . --file Dockerfile --tag raphaelfabricios/backend:$(echo ${GITHUB_SHA} | cut -c1-6)  --tag raphaelfabricios/backend:latest
     - name: Docker login
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker push
-      run: docker push raphaelfabricios/backend:$SHA
+      run: docker push raphaelfabricios/backend:$(echo ${GITHUB_SHA} | cut -c1-8) 
